@@ -1,12 +1,21 @@
 const exp = require('express')
 const app = exp()
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
 app.use(exp.json())
 app.use(exp.urlencoded({extended:false}))
+app.use(cookieParser());
 
 const {DBConnection} = require('./config/db.js')
-const { userRouter } = require('./routes/userRoute.js')
+const { authRoutes } = require('./routes/authRoutes.js')
+const { userRoutes } = require('./routes/userRoutes.js')
 
-app.use("/api/auth",userRouter)
+
+
+app.use("/api/auth",authRoutes)
+app.use("/api/user",userRoutes)
+
 app.get('/',(req,res)=>{
     res.send("Welcome to the OG OJ")
 })
