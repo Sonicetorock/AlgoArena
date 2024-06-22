@@ -36,10 +36,11 @@ const userSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-    // premiumQs:{
-    //     type: [mongoose.Schema.ObjectId],
-    //     ref:"Problem",
-    // },
+    premiumQs:{
+        type: [mongoose.Schema.ObjectId],
+        ref:"Problem",
+        default:[]
+    },
     bio:{
         type:String,
     }
