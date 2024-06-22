@@ -6,6 +6,10 @@ const cors = require('cors')
 app.use(exp.json())
 app.use(exp.urlencoded({extended:false}))
 app.use(cookieParser());
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    credentials: true
+}));
 
 const {DBConnection} = require('./config/db.js')
 const { authRoutes } = require('./routes/authRoutes.js')
