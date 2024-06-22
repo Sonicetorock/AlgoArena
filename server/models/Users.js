@@ -22,6 +22,13 @@ const userSchema = new mongoose.Schema({
         type: Date,
         required:[true, "DOB is a required field!"],
     },
+    refreshToken:{ 
+        //in ref to authController -> login & logout => saving refreshToken in refreshtoken
+        //added rightnow, but dk how it even working before adding this field
+        //now its being stored in db while logging in
+        //set to "" upon logout
+        type:String,
+    },
     forgotPassQ:{
         type:String,
     },
