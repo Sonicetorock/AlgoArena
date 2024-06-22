@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+import AlgoArena from '../assests/AlgoArenaLogos/logo-transparent-svg.svg'
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
@@ -12,10 +12,12 @@ const Navbar = () => {
     };
 
     return (
-        <div className=" w-full">
-          <nav className="sticky top-0 z-10 w-full px-4 py-2 bg-white shadow-md text-lg">
+        <div className="sticky top-0 z-10 w-full">
+          <nav className="px-4 py-2 bg-white shadow-md text-lg">
     <div className="flex items-center justify-between text-blue-gray-900">
-        <h2 className='cursor-pointer'>Algo Arena</h2>
+        {/* <div > */}
+        <img src={AlgoArena} alt="AA logo" className='h-12'/>
+        {/* </div> */}
         <div className="flex items-center gap-5">
             <ul className="flex gap-6 ">
                 {!user && (
