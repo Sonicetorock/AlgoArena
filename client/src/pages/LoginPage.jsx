@@ -12,7 +12,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("Current user:", user);
+        console.log("Current user @loginpage:", user);
     }, [user]);
 
     const handleSubmit = async (e) => {
@@ -29,7 +29,9 @@ const LoginPage = () => {
             if (res.user && res.accessToken) {
                 toast.success("Logged In successfully");
                 console.log("Global User:", res.user);
-                navigate('/user'); // Redirect to home page or dashboard
+                // Redirect to home page or dashboard of admin
+                if(res.user?.role == "admin") {navigate('/admin');console.log("Naving to Admin dash")}
+                else {navigate('/user');console.log("Naving to user dashboard")}
             } else {
                 setError('Unexpected response from server');
                 toast.error('Login failed. Please try again.');
@@ -122,7 +124,7 @@ const LoginPage = () => {
                                 </div>
 
                                 <div className="text-sm">
-                                    <a href="javascript:void(0);" className="text-blue-600 hover:underline font-semibold">
+                                    <a href="#" className="text-blue-600 hover:underline font-semibold">
                                         Forgot your password?
                                     </a>
                                 </div>

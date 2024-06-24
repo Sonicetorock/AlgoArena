@@ -58,7 +58,7 @@ const Navbar = () => {
                     <>
                         <li>
                             <NavLink
-                                to="/user/dashboard"
+                                to= {user?.role == "admin" ? "/admin/dashboard" : "/user/dashboard"}
                                 className={({ isActive }) =>
                                     isActive ? "text-blue-500" : "text-blue-gray-900"
                                 }
@@ -68,7 +68,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             <NavLink
-                                to="/user/account"
+                                to={user?.role == "admin" ? "/admin/account" : "/user/account"}
                                 className={({ isActive }) =>
                                     isActive ? "text-blue-500" : "text-blue-gray-900"
                                 }

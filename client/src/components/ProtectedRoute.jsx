@@ -20,7 +20,8 @@ const ProtectedRoute = ({ children, authenticationReq, role }) => {
             if (!authenticationReq) {
                 // If authentication is not required (e.g., accessing /login)
                 if (user) {
-                    navigate('/user'); 
+                    if (user?.role === 'admin')  navigate('/admin');
+                   else navigate('/user'); 
                     // {?.role === 'user'}
                 // } else if (user?.role === 'admin') {
                 //     navigate('/admin');

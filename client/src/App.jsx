@@ -59,14 +59,15 @@ const router = createBrowserRouter(
         <Route index path="dashboard" element={<UserDashboardPage />} />
         <Route path="account" element={<AccountProfilePage />} />
       </Route>
+
       {/* Admin routes */}
-      <Route path="adminDashboard" element={
+      <Route path="admin" element={
         <ProtectedRoute authenticationReq={true} role="admin">
           <AdminLayout />
         </ProtectedRoute>
       }>
-        <Route index element={<AdminDashboardPage />} />
-        
+        <Route index path="dashboard" element={<AdminDashboardPage />} />
+         <Route path="account" element={<AccountProfilePage />} />
       </Route>
 
       {/* Others*/}
