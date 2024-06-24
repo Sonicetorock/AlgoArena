@@ -11,11 +11,11 @@ const generateAccessToken = (user) => {
         id: user._id,
         email: user.email,
         role: 'user'
-    }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2m' });
+    }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 };
 
 const generateRefreshToken = (user) => {
-    return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '4m' });
+    return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
 const registerUser = async (req, res) => {
@@ -48,22 +48,7 @@ const registerUser = async (req, res) => {
             bio
         });
 
-        const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-
-        // Save refreshToken with user
-        user.refreshToken = refreshToken;
-        await user.save();
-
-        // Send refresh token as httpOnly cookie
-        res.cookie('jwt', refreshToken, {
-            httpOnly: true,
-            // secure: true,
-            // sameSite: 'None',
-            maxAge: 4 * 60 * 1000 // 4 minutes
-        });
-        user.password = undefined;
-        res.status(StatusCodes.CREATED).json({ msg: "Registered successfully", user, accessToken });
+        res.status(StatusCodes.CREATED).json({ msg: "Registered successfully", user });
     } catch (error) {
         console.error('Error registering:', error);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
@@ -105,7 +90,7 @@ const loginUser = async (req, res) => {
             httpOnly: true,
             // secure: true,
             // sameSite: 'None',
-            maxAge: 4 * 60 * 1000 // 4 minutes
+            maxAge: 7*24* 60 * 60* 1000 // 7d
         });
 
 
@@ -155,7 +140,6 @@ const logout = async (req, res) => {
 
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(204); // No content
-
     const refreshToken = cookies.jwt;
 
     // Is refreshToken in db?

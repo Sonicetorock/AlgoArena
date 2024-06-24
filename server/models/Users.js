@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     phone:{
         type:String,
-        required:[true, "Phone number is a required field!"],
+        // required:[true, "Phone number is a required field!"],
     },
     dob : {
         type: Date,

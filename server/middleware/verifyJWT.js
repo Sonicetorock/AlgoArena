@@ -17,6 +17,7 @@ const verifyJWT = (req, res, next) => {
             if (err) return res.status(403).json({ message: 'Forbidden' });
             req.user = decoded.email;
             req.roles = decoded.roles;
+            console.log("sucessfully passed jwt verification")
             next();
         }
     );
