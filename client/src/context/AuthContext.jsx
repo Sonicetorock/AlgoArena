@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await axios.post(`${API_URL}/auth/login`, { email, password }, { withCredentials: true });
+            console.log("@context user:" , response.data.user)
             if (response.data.user && response.data.accessToken) {
                 setUser(response.data.user);
                 setAccessToken(response.data.accessToken);
@@ -57,11 +58,14 @@ export const AuthProvider = ({ children }) => {
         try {
             setIsLoading(true);
             const response = await axios.post(`${API_URL}/auth/register`, userData, { withCredentials: true });
-            setUser(response.data.user);
-            setAccessToken(response.data.accessToken);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            localStorage.setItem('accessToken', response.data.accessToken);
-            setAuthHeader(response.data.accessToken);
+
+            //we are navigating to login upon success registration
+            //upon login , we will get the user
+            // setUser(response.data.user);
+            // setAccessToken(response.data.accessToken);
+            // localStorage.setItem('user', JSON.stringify(response.data.user));
+            // localStorage.setItem('accessToken', response.data.accessToken);
+            // setAuthHeader(response.data.accessToken);
             return response.data;
         } catch (error) {
             throw error;

@@ -33,10 +33,10 @@ const RegisterPage = () => {
         e.preventDefault();
         try {
             console.log(formData);
-            const response = await register(formData);
-            // Display toast notification for successful registration
-            toast.success('User registered successfully!')
-                    navigate('/login')
+            const res = await register(formData);
+            // toastsuccessful registration
+            toast.success(res.msg)//'User registered successfully!'
+            navigate('/login')
         } catch (error) {
             setError(error.response?.data?.error || error.message || "Login failed");
             toast.error(error.response?.data?.error || error.message || "Login failed");
@@ -46,7 +46,7 @@ const RegisterPage = () => {
     return (
         <div className="m-5 flex items-center justify-center font-[sans-serif]">
             <div className="max-w-3xl w-full p-8 bg-white border border-gray-300 rounded-lg shadow-[0_2px_22px_-4px_rgba(93,96,127,0.2)]  flex">
-                {/* Left Part - Mandatory Fields */}
+                {/*  Mandatory Fields */}
                 <div className="w-1/2 pr-8">
                     <h2 className="text-gray-800 text-3xl font-extrabold">Register</h2>
                     <form onSubmit={handleSubmit} className="space-y-4 mt-4">
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                     </p>
                     {error && <p className="text-red-500 mt-4">{error}</p>}
                 </div>
-                {/* Right Part - Additional Information */}
+                {/* Additional Information */}
                 <div className="w-1/2 pl-8 border-l">
                     <h2 className="text-gray-800 text-2xl font-extrabold mb-6">Additional Information</h2>
                     <div className="flex flex-col">
