@@ -47,7 +47,8 @@ const updateAccountDetails = async (req, res) => {
 
         // Save the updated user details
         await user.save();
-
+        user.password = undefined;
+        user.refreshToken = undefined;
         res.status(200).json({ message: 'Account details updated successfully', user });
     } catch (error) {
         console.log('BC: Error updating account details:', error);

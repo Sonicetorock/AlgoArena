@@ -4,21 +4,23 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 
 const ProfilePage = () => {
-  const { user } = useAuth();
+  const { user ,updateUser} = useAuth();
   const API_URL = 'http://localhost:8000/api';
   const [isEditing, setIsEditing] = useState(false);
   const [newPassword, setNewPassword] = useState('');
-  const [formData, setFormData] = useState({
+  const intialformData = {
     fullname: user?.fullname || '',
     password: '',
     bio: user?.bio || '',
     forgotPassQ: user?.forgotPassQ || '',
     forgotPassA: user?.forgotPassA || '',
     phone: user?.phone || '',
-  });
+  };
+  const [formData, setFormData] = useState(intialformData);
 
   useEffect(() => {
     // Update form data when user data changes
+    console.log("Setting form data!")
     setFormData({
       fullname: user?.fullname || '',
       password: '',
@@ -37,31 +39,6 @@ const ProfilePage = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   // ask old password
-  //   if (!formData.password) {
-  //     toast.error('Enter your old password for verification !');
-  //     return;
-  //   }
-  //       if(!newPassword) {
-  //         console.log("setting new passwordss as ", formData.password); setNewPassword(formData.password)
-  //       }//user dont want to change the old password
-  //       else {
-  //         console.log("setting old passwordss as ", newPassword);
-  //         console.log({...formData,password:newPassword});
-  //         setFormData({...formData,password:newPassword})} //changing old pass to new pass
-  //       // const res = await axios.put(`${API_URL}/user/accountDdetails`, formData);
-
-  //   // Proceed with updating user data here (e.g., call API, update context, etc.)
-  //   console.log('Updated Data', formData);
-  //   console.log('New Password', newPassword);
-
-  //   // Reset old password field
-  //   setNewPassword(null);
-
-  //   setIsEditing(false);
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -71,10 +48,10 @@ const ProfilePage = () => {
     }
     let updatedData = { ...formData };
     if (!newPassword) {
-        console.log("setting new password as ", formData.password);
+        console.log("new pass word is empty so only sending old pass-> ", formData.password);
         updatedData.password = formData.password;
     } else {
-        console.log("setting new password as ", newPassword);
+        console.log("new pass want empty so setting new password as , attching to lauch", newPassword);
         updatedData.password = newPassword;
     }
     //sending email also for fetching in controller
@@ -89,15 +66,23 @@ const ProfilePage = () => {
         const response = await axios.put(`${API_URL}/user/accountDetails`, payload);
         toast.success('Account details updated successfully!');
         console.log('Response Data:', response.data);
+        //setting global user
+        // Updating AuthContext and formData state with the updated user data
+        updateUser(response.data.user);
+
+        // setFormData((prevData) => ({
+        //     ...prevData,
+        //     ...updatedData,
+        //     password: '', // Reset the password field
+        // }));
+        // Reset new password field
+        setNewPassword('');
+        setIsEditing(false);
     } catch (error) {
         toast.error(error.response?.data?.error || error.msg || 'Error updating profile');
         console.error('Error:', error);
     }
 
-    // Reset new password field
-    setNewPassword('');
-    formData.password = '';
-    setIsEditing(false);
 };
 
 
@@ -109,7 +94,7 @@ const ProfilePage = () => {
             <h2 className="text-gray-800 text-3xl font-extrabold">Profile</h2>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={() => {setFormData(intialformData);setIsEditing(!isEditing)}}
             >
               {isEditing ? 'Cancel' : 'Edit'}
             </button>
@@ -122,6 +107,7 @@ const ProfilePage = () => {
               <input
                 type="email"
                 value={user?.email || ''}
+                id= "email"
                 disabled
                 className="border border-gray-300 rounded-lg px-3 py-2 bg-gray-200 text-gray-700"
               />

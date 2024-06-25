@@ -37,17 +37,20 @@ const router = createBrowserRouter(
     <Route>
 
       {/* Home routes (unauthenticated) */}
-      <Route element={<HomeLayout />}>
-        <Route index element={<HomePage />} />
+
+      <Route element={
+        <ProtectedRoute authenticationReq={false} toWhere="/">
+          <HomeLayout /> {/*Layout is protected so no explicitly need of protectedRoutes for subroutes of this */}
+        </ProtectedRoute>
+        }>
+        <Route index element={<HomePage />}/>
          {/*see protect route comp*/}
         <Route path="login" element={
-          <ProtectedRoute authenticationReq={false} toWhere="/user/dashboard">
             <LoginPage />
-          </ProtectedRoute>  } />
+          } />
         <Route path="register" element={
-          <ProtectedRoute authenticationReq={false} toWhere="/user/dashboard">
             <RegisterPage />
-          </ProtectedRoute>
+
         } />
       </Route>
 

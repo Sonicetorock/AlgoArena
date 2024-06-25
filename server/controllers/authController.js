@@ -95,6 +95,8 @@ const loginUser = async (req, res) => {
 
 
         user.password = undefined;//making invisible kin of
+        //protecting this , if MIM has access there is no use of using this refresh mech, done in updateAccountdetails too
+        user.refreshToken = undefined;
         res.status(StatusCodes.OK).json({ msg: "Logged In successfully", user, accessToken });
     } catch (error) {
         console.error('Error logging in:(Incorct Creds)', error);
