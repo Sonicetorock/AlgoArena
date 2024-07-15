@@ -6,21 +6,27 @@ require('dotenv').config();
 // Model imports 
 const Users = require('../models/Users');
 
+//gen new access token upon expiry 
 const generateAccessToken = (user) => {
+    console.log("generating access token")
+    // console.log(user)
     return jwt.sign({
         id: user._id,
         email: user.email,
-        role: 'user'
+        role: user?.role||"user",
     }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 };
 
+//gen new refresh token to get upon expiry of old one
 const generateRefreshToken = (user) => {
     return jwt.sign({ id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
+//registering user if all consitions met
+// form validation should be done 
 const registerUser = async (req, res) => {
     const { fullname, email, password, phone, forgotPassQ, forgotPassA, dob, bio } = req.body;
-    console.log(req.body)
+    // console.log(req.body)
     try {
         console.log("called register");
         if (!(email && dob  && password && fullname)) {
@@ -55,6 +61,7 @@ const registerUser = async (req, res) => {
     }
 };
 
+//loggin in user
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -67,6 +74,7 @@ const loginUser = async (req, res) => {
         }
         //chk user exists or not
         const user = await Users.findOne({ email });
+        console.log("BC user login :",user)
         if (!user) {
             console.log("BC: User not found");
             return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'User does not exist! Please Sign Up' });
@@ -77,7 +85,7 @@ const loginUser = async (req, res) => {
             console.log("BC: Passwords do not match");
             return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Incorrect credentials' });
         }
-
+        console.log("before gernating accT", user)
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
@@ -104,6 +112,7 @@ const loginUser = async (req, res) => {
     }
 };
 
+//refresing accesstoken based on stored refresh and requested refresh token 
 const refresh = (req, res) => {
     console.log("called refresh");
     //we are setting and sending a cookie name d "jwt"(http only -> can be only acceseed by a server) while authentication
@@ -134,9 +143,7 @@ const refresh = (req, res) => {
     );
 };
 
-// @desc Logout User
-// @route POST /auth/logout
-// @access Public - just to clear cookie if exists
+// just to clear cookie if exists
 const logout = async (req, res) => {
     console.log("called logout");
 
