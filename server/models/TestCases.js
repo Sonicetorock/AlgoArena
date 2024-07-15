@@ -9,7 +9,8 @@ const testcaseSchema = new mongoose.Schema({
     input :{
         type:String,
         required:[true, "Input for test case is a required unique field!"],
-        unique:true//tc should be unqie to avoid any ,alicios script trying to have diff output for same input
+        //this is not the combo of pid and input
+        // unique:true//tc should be unqie to avoid any ,alicios script trying to have diff output for same input
     },
     output:{
         type:String,
@@ -20,6 +21,6 @@ const testcaseSchema = new mongoose.Schema({
         type:String,
         //can be optional , good to have for demotestcases
     }
-})
-
+}, { timestamps: true })
+testcaseSchema.index({ pid: 1, input: 1 }, { unique: true });//this combination of pid and input is maintained unique
 module.exports=mongoose.model("TestCase",testcaseSchema)

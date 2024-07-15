@@ -11,7 +11,7 @@ const subSchema = new mongoose.Schema({
         required:[true, "BC: User id for a submission is a required field!"],
         ref:"User"
     },
-    solution:{
+    code:{
         type:String,
         required:[true, "BC :solution for submission is a required field!"],
     },
@@ -34,6 +34,6 @@ const subSchema = new mongoose.Schema({
         type:Number
         //deafult shuld be maximum
     },
-})
+}, { timestamps: true })
 
 module.exports=mongoose.model("Submission",subSchema)

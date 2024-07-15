@@ -39,6 +39,36 @@ const problemSchema = new mongoose.Schema({
     hints :{
         type:[String]
     },
+    testcases:[{
+        input :{
+            type:String,
+            required:[true, "Input for test case is a required unique field!"],
+            //this is not the combo of pid and input
+            unique:true//tc should be unqie to avoid any ,alicios script trying to have diff output for same input
+        },
+        output:{
+            type:String,
+            required:[true, "Output for test case is a required field!"],
+            //not necessarily unique coz solutions can be same like 2, 3..
+        },
+    }],
+    demoTestCases:[{
+        input :{
+            type:String,
+            required:[true, "Input for test case is a required unique field!"],
+            //this is not the combo of pid and input
+            unique:true//tc should be unqie to avoid any ,alicios script trying to have diff output for same input
+        },
+        output:{
+            type:String,
+            required:[true, "Output for test case is a required field!"],
+            //not necessarily unique coz solutions can be same like 2, 3..
+        },
+        explanation:{
+            type:String,
+            //can be optional , good to have for demotestcases
+        }
+    }],
     totalSubmissions:{
         type:Number,
         default:0
@@ -55,6 +85,7 @@ const problemSchema = new mongoose.Schema({
         type:Number,
         default:0
     },
-})
+    
+}, { timestamps: true })
 
 module.exports=mongoose.model("Problem",problemSchema)
