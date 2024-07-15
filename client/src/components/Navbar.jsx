@@ -76,6 +76,16 @@ const Navbar = () => {
                                 Account
                             </NavLink>
                         </li>
+                        { user.role === 'admin' && (<li>
+                       <NavLink
+                        to="/admin/post-problem"
+                        className={({ isActive }) =>
+                            isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                        >
+                        Post a Problem
+                        </NavLink>
+                    </li>)}
                     </>
                 )}
             </ul>
@@ -83,18 +93,21 @@ const Navbar = () => {
                 {!user ? (
                     <>
                         <Link to="/login">
-                            <button className="px-4 py-2 text-sm font-bold text-gray-900 uppercase bg-gray-100 rounded-lg">
+                            <button className="bg-amber-700 text-amber-400 border border-amber-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                            <span className="bg-amber-400 shadow-amber-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-300 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
                                 Log In
                             </button>
                         </Link>
                         <Link to="/register">
-                            <button className="px-4 py-2 text-sm font-bold text-white uppercase bg-gray-800 rounded-lg">
+                            <button className="bg-zinc-950 text-zinc-400 border border-zinc-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                            <span className="bg-zinc-400 shadow-zinc-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
                                 Sign Up
                             </button>
                         </Link>
                     </>
                 ) : (
-                    <button onClick={handleLogout} className="px-4 py-2 text-xs font-bold text-white uppercase bg-gray-800 rounded-lg">
+                    <button onClick={handleLogout} className="bg-rose-950 text-rose-400 border border-rose-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                         <span className="bg-rose-400 shadow-rose-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
                         Logout
                     </button>
                 )}

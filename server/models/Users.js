@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
         type: Date,
         required:[true, "DOB is a required field!"],
     },
+    role :{
+        type: String,
+        default: "user",
+        enum: ["user", "admin"]
+    },
     refreshToken:{ 
         //in ref to authController -> login & logout => saving refreshToken in refreshtoken
         //added rightnow, but dk how it even working before adding this field
@@ -52,6 +57,6 @@ const userSchema = new mongoose.Schema({
         type:String,
     }
 
-})
+}, { timestamps: true })
 
 module.exports=mongoose.model("User",userSchema)

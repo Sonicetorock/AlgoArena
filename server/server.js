@@ -14,11 +14,13 @@ app.use(cors({
 const {DBConnection} = require('./config/db.js')
 const { authRoutes } = require('./routes/authRoutes.js')
 const { userRoutes } = require('./routes/userRoutes.js')
+const adminRoutes = require('./routes/adminRoutes.js')
 
 
 
 app.use("/api/auth",authRoutes)
 app.use("/api/user",userRoutes)
+app.use("/api/admin",adminRoutes)
 
 app.get('/',(req,res)=>{
     res.send("Welcome to the OG OJ")

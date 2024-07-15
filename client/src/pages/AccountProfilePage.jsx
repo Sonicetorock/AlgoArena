@@ -8,6 +8,7 @@ const ProfilePage = () => {
   const API_URL = 'http://localhost:8000/api';
   const [isEditing, setIsEditing] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  //remember we are directly accessing from local storage not calling any api like getAccountDetails
   const intialformData = {
     fullname: user?.fullname || '',
     password: '',
@@ -144,6 +145,7 @@ const ProfilePage = () => {
               <input
                 type="password"
                 name="password"
+                placeholder={isEditing ?'Enter Your Old password': '*******'}
                 value={formData.password}
                 onChange={handleChange}
                 disabled={!isEditing}
