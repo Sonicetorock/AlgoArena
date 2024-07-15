@@ -10,6 +10,9 @@ import AccountProfilePage from './pages/AccountProfilePage';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import PostProblemPage from './pages/admin/PostProblemPage';
+import EditProblemPage from './pages/admin/EditProblemPage';
+import ProblemPage from './pages/user/ProblemPage';
 
 const HomeLayout = () => (
   <>
@@ -38,13 +41,13 @@ const router = createBrowserRouter(
 
       {/* Home routes (unauthenticated) */}
 
+      {/*see protect route comp*/}
       <Route element={
         <ProtectedRoute authenticationReq={false} toWhere="/">
           <HomeLayout /> {/*Layout is protected so no explicitly need of protectedRoutes for subroutes of this */}
         </ProtectedRoute>
         }>
         <Route index element={<HomePage />}/>
-         {/*see protect route comp*/}
         <Route path="login" element={
             <LoginPage />
           } />
@@ -61,6 +64,7 @@ const router = createBrowserRouter(
         </ProtectedRoute>}>
         <Route index path="dashboard" element={<UserDashboardPage />} />
         <Route path="account" element={<AccountProfilePage />} />
+        <Route path="problems/:id" element={<ProblemPage />} />
       </Route>
 
       {/* Admin routes */}
@@ -71,6 +75,8 @@ const router = createBrowserRouter(
       }>
         <Route index path="dashboard" element={<AdminDashboardPage />} />
          <Route path="account" element={<AccountProfilePage />} />
+         <Route path="post-problem" element={<PostProblemPage />} />
+          <Route path="edit-problem/:id" element={<EditProblemPage />} />
       </Route>
 
       {/* Others*/}
