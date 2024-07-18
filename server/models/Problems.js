@@ -79,11 +79,11 @@ const problemSchema = new mongoose.Schema({
     },
     constraintTime:{
         type:Number,
-        default:0
+        default:2
     },
     constraintMemory:{
         type:Number,
-        default:0
+        default:2
     },
     
 }, { timestamps: true })

@@ -654,7 +654,9 @@ const PostProblemPage = () => {
                         </div>
 
                         {/* Time and Memory Constraints */}
-                        <div>
+                        <div className="flex justify-around items-baseline">
+
+                        <div className='w-1/3'>
                             <label className="block text-sm font-medium text-gray-700">Time Constraint</label>
                             <input
                                 type="number"
@@ -662,9 +664,9 @@ const PostProblemPage = () => {
                                 value={formData.constraintTime}
                                 onChange={handleInputChange}
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            />
+                                />
                         </div>
-                        <div>
+                        <div className='w-1/3'>
                             <label className="block text-sm font-medium text-gray-700">Memory Constraint</label>
                             <input
                                 type="number"
@@ -672,9 +674,10 @@ const PostProblemPage = () => {
                                 value={formData.constraintMemory}
                                 onChange={handleInputChange}
                                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                            />
+                                />
                         </div>
 
+                             </div>
                         {/* Submit button */}
                         <div>
                             <button

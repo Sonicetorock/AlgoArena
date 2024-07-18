@@ -13,6 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 import PostProblemPage from './pages/admin/PostProblemPage';
 import EditProblemPage from './pages/admin/EditProblemPage';
 import ProblemPage from './pages/user/ProblemPage';
+import AllProblems from './pages/admin/AllProblems';
 
 const HomeLayout = () => (
   <>
@@ -74,6 +75,7 @@ const router = createBrowserRouter(
         </ProtectedRoute>
       }>
         <Route index path="dashboard" element={<AdminDashboardPage />} />
+          <Route path="allproblems" element={<AllProblems />} />
          <Route path="account" element={<AccountProfilePage />} />
          <Route path="post-problem" element={<PostProblemPage />} />
           <Route path="edit-problem/:id" element={<EditProblemPage />} />

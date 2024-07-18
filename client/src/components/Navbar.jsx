@@ -12,7 +12,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="sticky top-0 z-10 w-full">
+        <div className="sticky top-0 z-30 w-full">
           <nav className="px-4 py-2 bg-white shadow-md text-lg">
     <div className="flex items-center justify-between text-blue-gray-900">
         {/* <div > */}
@@ -78,12 +78,12 @@ const Navbar = () => {
                         </li>
                         { user.role === 'admin' && (<li>
                        <NavLink
-                        to="/admin/post-problem"
+                        to="/admin/allproblems"
                         className={({ isActive }) =>
                             isActive ? "text-blue-500" : "text-blue-gray-900"
                         }
                         >
-                        Post a Problem
+                        All Problems
                         </NavLink>
                     </li>)}
                     </>
