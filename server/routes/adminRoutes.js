@@ -1,5 +1,5 @@
 const express = require('express');
-const { getDashboardStats, getAllProblems, addProblem, updateProblem, deleteProblem, getProblem, getAllUsers, deleteUser } = require('../controllers/adminController');
+const { getDashboardStats, getAllProblems, addProblem, updateProblem, deleteProblem, getProblem, getAllUsers, deleteUser, getOverallVerdictCounts, getVerdictCounts, getLanguageWiseSubmissionCounts, getProblemLevelCounts, getMonthlyStats } = require('../controllers/adminController');
 const { isAdmin } = require('../middleware/verifyJWT'); 
 
 const adminRoutes = express.Router();
@@ -20,5 +20,10 @@ adminRoutes.delete('/problems/:id',deleteProblem);
 adminRoutes.get('/users',getAllUsers);
 adminRoutes.delete('/users/:id',deleteUser);
 
-
+//graph visuals
+adminRoutes.get('/overallVerdicts', getOverallVerdictCounts)
+adminRoutes.get('/verdicts/:id', getVerdictCounts)
+adminRoutes.get('/getLanguageWiseSubmissionCounts', getLanguageWiseSubmissionCounts);
+adminRoutes.get('/getProblemLevelCount', getProblemLevelCounts)
+adminRoutes.get('/getMonthlyStats', getMonthlyStats)
 module.exports =  adminRoutes;

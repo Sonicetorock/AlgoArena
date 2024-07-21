@@ -162,7 +162,7 @@ const submitCode = async (req, res) => {
         let allTestsPassed = true;
         let maxExecTime = 0;
         let maxExecMemory = 0;
-        let verdict = 'AC : Accpeted'; // Assume Accepted initially
+        let verdict = 'AC : Accepted'; // Assume Accepted initially
         const totalTCs = problem.testcases.length;
         // Execute code for each test case
         for (const testCase of problem.testcases) {
@@ -189,10 +189,10 @@ const submitCode = async (req, res) => {
 
                 if (!passed) {
                     allTestsPassed = false;
-                    verdict = 'WA :Wrong answer'; // Wrong Answer
+                    verdict = 'WA : Wrong Answer'; // Wrong Answer
                     break;
                 }
-
+                
                 // Clean up input file
                 deleteFile(inputFilePath);
             } catch (error) {
@@ -202,7 +202,7 @@ const submitCode = async (req, res) => {
                     passed: false
                 });
                 allTestsPassed = false;
-                verdict = 'RE :Runtime Error'; // Runtime Error
+                verdict = 'RE : Runtime Error'; // Runtime Error
                 break;
             }
         }

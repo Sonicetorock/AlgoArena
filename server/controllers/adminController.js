@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../models/Users');
 const Problem = require('../models/Problems');
 const TestCase = require('../models/TestCases');
+const Submissions = require('../models/Submissions');
 
 // fetching admin dashboard stats
 exports.getDashboardStats = async (req, res) => {
@@ -178,3 +179,210 @@ exports.deleteUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+//get overall verdict analysis
+exports.getOverallVerdictCounts = async (req, res) => {
+    try {
+      console.log(`called overall verdict analysis for user`)
+      const verdictCounts = await Submissions.aggregate([
+        { $group: {
+          _id: '$verdict',
+          count: { $sum: 1 }
+        }},
+        { $project: {
+          _id: 0,
+          verdict: '$_id',
+          count: 1
+        }}
+      ]);
+  
+      // Transform the result into the format needed for the chart
+      const formattedCounts = {
+        'AC : Accepted': 0,
+        'WA : Wrong Answer': 0,
+        'RE : Runtime Error': 0,
+        'TLE : Time Limit Exceeded': 0,
+        'MLE : Memory Limit Exceeded': 0
+      };
+  
+      verdictCounts.forEach(item => {
+        if (item.verdict in formattedCounts) {
+          formattedCounts[item.verdict] = item.count;
+        } else {
+          // Handle any unexpected verdicts
+          formattedCounts[item.verdict] = item.count;
+        }
+      });
+  
+      res.json(formattedCounts);
+    } catch (error) {
+      console.error('Error fetching overall verdict counts:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+//get verdict counts by userID
+exports.getVerdictCounts = async (req, res) => {
+  try {
+    const { userId } = req.params; // Assuming you want to get counts for a specific user
+    
+      console.log(`called verdict analysis for user ${userId}`)
+      const verdictCounts = await Submissions.aggregate([
+        { $match: { uid: mongoose.Types.ObjectId(userId) } },
+        { $group: {
+          _id: '$verdict',
+          count: { $sum: 1 }
+        }},
+        { $project: {
+          _id: 0,
+          verdict: '$_id',
+          count: 1
+        }}
+      ]);
+  
+      // Transform the result into the format needed for the chart
+      const formattedCounts = {
+        'AC : Accepted': 0,
+        'WA : Wrong Answer': 0,
+        'RE : Runtime Error': 0,
+        'TLE : Time Limit Exceeded': 0,
+        'MLE : Memory Limit Exceeded': 0
+      };
+  
+      verdictCounts.forEach(item => {
+        formattedCounts[item.verdict] = item.count;
+      });
+  
+      res.json(formattedCounts);
+    } catch (error) {
+      console.error('Error fetching verdict counts:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  exports.getLanguageWiseSubmissionCounts = async (req, res) => {
+    console.log("Called language wise sub analysis")
+    try {
+      const languageCounts = await Submissions.aggregate([
+        { $group: {
+          _id: '$choseLang',
+          count: { $sum: 1 }
+        }},
+        { $project: {
+          _id: 0,
+          language: '$_id',
+          count: 1
+        }},
+        { $sort: { count: -1 } } // Sort by count in descending order
+      ]);
+  
+      //formatting
+      const formattedCounts = {};
+      languageCounts.forEach(item => {
+        formattedCounts[item.language.toUpperCase()] = item.count;
+      });
+  
+      res.json(formattedCounts);
+    } catch (error) {
+      console.error('Error fetching language wise submission analysis:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
+  exports.getProblemLevelCounts = async (req, res) => {
+    try {
+      const levelCounts = await Problem.aggregate([
+        { $group: {
+          _id: '$level',
+          count: { $sum: 1 }
+        }},
+        { $project: {
+          _id: 0,
+          level: '$_id',
+          count: 1
+        }}
+      ]);
+  
+      // Transform the result into the format needed for the chart
+      const formattedCounts = {
+        normal: 0,
+        premium: 0,
+        elite: 0
+      };
+  
+      levelCounts.forEach(item => {
+        if (item.level in formattedCounts) {
+          formattedCounts[item.level] = item.count;
+        }
+      });
+  
+      res.json(formattedCounts);
+    } catch (error) {
+      console.error('Error fetching problem level counts:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  //monthly wise total questions, submissions, users
+  exports.getMonthlyStats = async (req, res) => {
+    try {
+      const currentDate = new Date();
+      const oneYearAgo = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1);
+  
+      // get cumulative counts
+      const getCumulativeCounts = async (Model) => {
+        const counts = await Model.aggregate([
+          {
+            $group: {
+              _id: null,
+              countsByMonth: {
+                $push: {
+                  date: "$createdAt",
+                  count: 1
+                }
+              }
+            }
+          }
+        ]);
+  
+        return counts.length > 0 ? counts[0] : { totalCount: 0, countsByMonth: [] };
+      };
+  
+      const userCounts = await getCumulativeCounts(User);
+      const submissionCounts = await getCumulativeCounts(Submissions);
+      const questionCounts = await getCumulativeCounts(Problem);
+  
+      //indivudual arr
+      const months = [];
+      const userCountsArray = [];
+      const submissionCountsArray = [];
+      const questionCountsArray = [];
+  
+      // Generate data for the last 12 months
+      for (let i = 11; i >= 0; i--) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+        const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        
+        months.push(date.toLocaleString('default', { month: 'short' }));
+  
+        userCountsArray.push(userCounts.countsByMonth.filter(item => item.date <= monthEnd).length);
+        submissionCountsArray.push(submissionCounts.countsByMonth.filter(item => item.date <= monthEnd).length);
+        questionCountsArray.push(questionCounts.countsByMonth.filter(item => item.date <= monthEnd).length);
+      }
+  
+      res.json({
+        months,
+        userCounts: userCountsArray,
+        submissionCounts: submissionCountsArray,
+        questionCounts: questionCountsArray,
+        // totals: {
+        //   users: userCounts.totalCount,
+        //   submissions: submissionCounts.totalCount,
+        //   questions: questionCounts.totalCount
+        // }
+      });
+  
+    } catch (error) {
+      console.error('Error fetching monthly statistics:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
