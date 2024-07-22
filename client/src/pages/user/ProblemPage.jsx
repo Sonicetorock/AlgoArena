@@ -87,8 +87,8 @@ const ProblemPage = () => {
       console.log(response.data);
 
       //toasting 
-      if(response.data.allTestsPassed) toast.success(response.data.verdict);
-      else toast.error(response.data.verdict);
+      if(response.data.allTestsPassed) {toast.success(response.data.verdict);toast.success("YourScore+=100",{icon:'⚡'})}
+      else {toast.error(response.data.verdict);toast.success("YourScore-=15",{icon:'🥹'})}
       const formattedOutput = formatTestCaseResults(response.data.results,response.data.totalTCs);
       setUserOutput(formattedOutput);
     } catch (error) {

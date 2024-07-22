@@ -12,110 +12,135 @@ const Navbar = () => {
     };
 
     return (
-        <div className="sticky top-0 z-30 w-full">
-          <nav className="px-4 py-2 bg-white shadow-md text-lg">
-    <div className="flex items-center justify-between text-blue-gray-900">
-        {/* <div > */}
-        <img src={AlgoArena} alt="AA logo" className='h-12'/>
-        {/* </div> */}
-        <div className="flex items-center gap-5">
-            <ul className="flex gap-6 ">
+      <div className="sticky top-0 z-30 w-full">
+        <nav className="px-4 py-2 bg-white shadow-md text-lg">
+          <div className="flex items-center justify-between text-blue-gray-900">
+            {/* <div > */}
+            <img src={AlgoArena} alt="AA logo" className="h-12" />
+            {/* </div> */}
+            <div className="flex items-center gap-5">
+              <ul className="flex gap-6 ">
                 {!user && (
-                    <>
-                        <li>
-                            <NavLink
-                                to="/"
-                                className={({ isActive }) =>
-                                    isActive ? "text-blue-500" : "text-blue-gray-900"
-                                }
-                            >
-                                Home
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/contact"
-                                className={({ isActive }) =>
-                                    isActive ? "text-blue-500" : "text-blue-gray-900"
-                                }
-                            >
-                                Contact
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/about"
-                                className={({ isActive }) =>
-                                    isActive ? "text-blue-500" : "text-blue-gray-900"
-                                }
-                            >
-                                About Us
-                            </NavLink>
-                        </li>
-                    </>
+                  <>
+                    <li>
+                      <NavLink
+                        to="/"
+                        className={({ isActive }) =>
+                          isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                      >
+                        Home
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/contact"
+                        className={({ isActive }) =>
+                          isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                      >
+                        Contact
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/about"
+                        className={({ isActive }) =>
+                          isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                      >
+                        About Us
+                      </NavLink>
+                    </li>
+                  </>
                 )}
                 {user && (
-                    <>
-                        <li>
-                            <NavLink
-                                to= {user?.role == "admin" ? "/admin/dashboard" : "/user/dashboard"}
-                                className={({ isActive }) =>
-                                    isActive ? "text-blue-500" : "text-blue-gray-900"
-                                }
-                            >
-                                Dashboard
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to={user?.role == "admin" ? "/admin/account" : "/user/account"}
-                                className={({ isActive }) =>
-                                    isActive ? "text-blue-500" : "text-blue-gray-900"
-                                }
-                            >
-                                Account
-                            </NavLink>
-                        </li>
-                        { user.role === 'admin' && (<li>
-                       <NavLink
-                        to="/admin/allproblems"
-                        className={({ isActive }) =>
-                            isActive ? "text-blue-500" : "text-blue-gray-900"
+                  <>
+                    <li>
+                      <NavLink
+                        to={
+                          user?.role == "admin"
+                            ? "/admin/dashboard"
+                            : "/user/dashboard"
                         }
-                        >
-                        All Problems
-                        </NavLink>
-                    </li>)}
-                    </>
+                        className={({ isActive }) =>
+                          isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                      >
+                        Dashboard
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to={
+                          user?.role == "admin"
+                            ? "/admin/account"
+                            : "/user/account"
+                        }
+                        className={({ isActive }) =>
+                          isActive ? "text-blue-500" : "text-blue-gray-900"
+                        }
+                      >
+                        Account
+                      </NavLink>
+                    </li>
+                    {user.role === "admin" && (
+                      <>
+                        <li>
+                          <NavLink
+                            to="/admin/allproblems"
+                            className={({ isActive }) =>
+                              isActive ? "text-blue-500" : "text-blue-gray-900"
+                            }
+                          >
+                            All Problems
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            to="/admin/allusers"
+                            className={({ isActive }) =>
+                              isActive ? "text-blue-500" : "text-blue-gray-900"
+                            }
+                          >
+                            All Users
+                          </NavLink>
+                        </li>
+                      </>
+                    )}
+                  </>
                 )}
-            </ul>
-            <div className="flex items-center gap-x-2">
+              </ul>
+              <div className="flex items-center gap-x-2">
                 {!user ? (
-                    <>
-                        <Link to="/login">
-                            <button className="bg-amber-700 text-amber-400 border border-amber-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
-                            <span className="bg-amber-400 shadow-amber-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-300 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                                Log In
-                            </button>
-                        </Link>
-                        <Link to="/register">
-                            <button className="bg-zinc-950 text-zinc-400 border border-zinc-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
-                            <span className="bg-zinc-400 shadow-zinc-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                                Sign Up
-                            </button>
-                        </Link>
-                    </>
+                  <>
+                    <Link to="/login">
+                      <button className="bg-amber-700 text-amber-400 border border-amber-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                        <span className="bg-amber-400 shadow-amber-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-300 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
+                        Log In
+                      </button>
+                    </Link>
+                    <Link to="/register">
+                      <button className="bg-zinc-950 text-zinc-400 border border-zinc-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
+                        <span className="bg-zinc-400 shadow-zinc-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
+                        Sign Up
+                      </button>
+                    </Link>
+                  </>
                 ) : (
-                    <button onClick={handleLogout} className="bg-rose-950 text-rose-400 border border-rose-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group">
-                         <span className="bg-rose-400 shadow-rose-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
-                        Logout
-                    </button>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-rose-950 text-rose-400 border border-rose-400 border-b-4 font-medium overflow-hidden relative px-2 py-1 rounded-md hover:brightness-150 hover:border-t-4 hover:border-b active:opacity-75 outline-none duration-300 group"
+                  >
+                    <span className="bg-rose-400 shadow-rose-400 absolute -top-[150%] left-0 inline-flex w-80 h-[5px] rounded-md opacity-50 group-hover:top-[150%] duration-500 shadow-[0_0_10px_10px_rgba(0,0,0,0.3)]"></span>
+                    Logout
+                  </button>
                 )}
+              </div>
             </div>
-        </div>
-    </div>
-</nav>
-        </div>
+          </div>
+        </nav>
+      </div>
     );
 };
 

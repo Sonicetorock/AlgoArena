@@ -126,7 +126,7 @@ const EditProblemPage = () => {
     try {
       await axios.put(`${apiAdmin}/problems/${id}`, formData);
       toast.success("Problem updated successfully");
-      navigate("/admin/dashboard");
+      navigate("/admin/allproblems");
     } catch (error) {
       toast.error("Error updating problem");
       console.error("Error updating problem:", error);

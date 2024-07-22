@@ -96,7 +96,7 @@ const ProblemLevel_DoughnutHolder = () => {
   }
 
   return (
-    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: 450, textAlign: "center" }}>
+    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: 400, textAlign: "center" }}>
       <h1 className="text-2xl">
         Problem Level Distribution
       </h1>

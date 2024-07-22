@@ -14,6 +14,7 @@ import PostProblemPage from './pages/admin/PostProblemPage';
 import EditProblemPage from './pages/admin/EditProblemPage';
 import ProblemPage from './pages/user/ProblemPage';
 import AllProblems from './pages/admin/AllProblems';
+import AllUsers from './pages/admin/AllUsers';
 
 const HomeLayout = () => (
   <>
@@ -79,6 +80,7 @@ const router = createBrowserRouter(
          <Route path="account" element={<AccountProfilePage />} />
          <Route path="post-problem" element={<PostProblemPage />} />
           <Route path="edit-problem/:id" element={<EditProblemPage />} />
+          <Route path="allusers" element={<AllUsers />} />
       </Route>
 
       {/* Others*/}
