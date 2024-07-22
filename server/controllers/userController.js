@@ -1,7 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
+const mongoose = require("mongoose");
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
-
+const { ObjectId } = require('mongodb');
 //model imports
 const Users = require('../models/Users');
 const Problems = require('../models/Problems');
@@ -230,7 +231,16 @@ const submitCode = async (req, res) => {
         });
 
         await submission.save();
-
+        // Update user's solved problems and score
+        const user = await Users.findById(uid);
+        if (user) {
+            if (allTestsPassed && !user.solvedQs.includes(pid)) {
+                user.solvedQs.push(pid);
+                user.score += 100;
+            }
+            if(!allTestsPassed) user.score+= -15;
+            await user.save();
+        }
         res.status(200).json({
             allTestsPassed,
             results, // an array
@@ -246,5 +256,113 @@ const submitCode = async (req, res) => {
     }
 };
 
+const getVerdictCounts = async (req, res) => {
+    try {
+      const { id } = req.params;
+      console.log(`called verdict analysis for user ${id}`);
   
-module.exports = {getAccountDetails,updateAccountDetails,getAllProblems,getProblem,compile,submitCode}
+      const verdictCounts = await Submissions.aggregate([
+        { $match: { uid: new ObjectId(id) } },
+        {
+          $group: {
+            _id: "$verdict",
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            verdict: "$_id",
+            count: 1,
+          },
+        },
+      ]);
+  
+      // Efficiently format data using reduce
+      const formattedCounts = verdictCounts.reduce((acc, item) => {
+        acc[item.verdict] = item.count;
+        return acc;
+      }, {
+        "AC : Accepted": 0, // Initialize verdict counts with 0
+        "WA : Wrong Answer": 0,
+        "RE : Runtime Error": 0,
+        "TLE : Time Limit Exceeded": 0,
+        "MLE : Memory Limit Exceeded": 0,
+      }); // Use an object with initial counts
+  
+      const totalCount = Object.values(formattedCounts).reduce((sum, count) => sum + count, 0);
+  
+      if (totalCount === 0) {
+        console.log('No submissions found for user');
+        console.log("verdict counts : ", {});
+        res.json({}); // Return empty object if total count is 0
+      } else {
+        console.log(formattedCounts);
+        res.json(formattedCounts);
+      }
+    } catch (error) {
+      console.error('Error in getVerdictCounts:', error);
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+const getLanguageWiseSubmissionCounts = async (req, res) => {
+   
+    try {
+        const { id } = req.params;
+        // console.log('Received ID:', id);
+    
+        const languageCounts = await Submissions.aggregate([
+          { $match: { uid: new ObjectId(id) } },
+          { $group: { _id: "$choseLang", count: { $sum: 1 } } },
+        ]);
+    
+        const formattedCounts = languageCounts.reduce((acc, item) => {
+          acc[item._id] = item.count;
+          return acc;
+        }, {}); //  accumulator as empty  {}
+    
+        // console.log(`Language counts for user ${id}:`, formattedCounts);
+    
+        if (Object.keys(formattedCounts).length === 0) {
+          // user has any submissions?
+          const submissionCount = await Submissions.countDocuments({ uid: new ObjectId(id) });
+        //   console.log(`Total submissions for user ${id}:`, submissionCount);
+        }
+        console.log(`language counts for user ${id}:`, formattedCounts);
+        res.status(200).json(formattedCounts);    
+    } catch (error) {
+        console.error('Error in getLanguageWiseSubmissionCounts:', error);
+        res.status(500).json({ error: error.message });
+    }
+
+};
+
+const getProblemLevelCounts = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // console.log('Received ID:', id);
+    
+        const userSubmissions = await Submissions.find({ uid: new ObjectId(id) }).distinct('pid');
+        // console.log(`User submissions for ${id}:`, userSubmissions);
+    
+        // Filter for existing problems to avoid unnecessary queries
+        const existingProblems = await Problems.find({ _id: { $in: userSubmissions } }).select('_id difficulty');
+        // console.log(`Existing problems for user ${id}:`, existingProblems);
+    
+        const levelCounts = existingProblems.reduce((acc, problem) => {
+          acc[problem.difficulty] = (acc[problem.difficulty] || 0) + 1; // Initialize count to 0 if not present
+          return acc;
+        }, {}); // Initialize accumulator as an empty object {}
+    
+        console.log(`Level counts for user ${id}:`, levelCounts);
+    
+        res.status(200).json(levelCounts);
+    }    catch (error) {
+        console.error('Error in getProblemLevelCounts:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+  
+module.exports = {getAccountDetails,updateAccountDetails,getAllProblems,getProblem,compile,submitCode,getProblemLevelCounts,getLanguageWiseSubmissionCounts,getVerdictCounts}
