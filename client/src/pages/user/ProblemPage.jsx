@@ -11,6 +11,7 @@ import CodeEditorSettings from "./CodeEditorSettings";
 import { DNA } from "react-loader-spinner";
 
 // icons
+import { Eraser , CirclePlay,Send} from 'lucide-react';
 import { FaTags } from "react-icons/fa6";
 import { CiCalendarDate } from "react-icons/ci";
 import { MdUpdate } from "react-icons/md";
@@ -331,6 +332,14 @@ const ProblemPage = () => {
             language={userLang}
             theme={userTheme}
             value={userCode}
+            loading={ <DNA
+              visible={true}
+              height="50"
+              width="50"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />}
             options={{
               fontSize: fontSize,
               automaticLayout: true,
@@ -341,30 +350,33 @@ const ProblemPage = () => {
             onChange={(value) => setUserCode(value)}
           />
           <div className="mt-4">
+            <div className="flex justify-start align-baseline items-center gap-2 mb-4">
+
             <button
-              className="bg-blue-500 text-white py-2 px-4 mr-2"
-              onClick={compile}
-            >
+              className="bg-blue-500 text-white py-2 px-4 mr-2 flex gap-1 rounded-sm"
+              onClick={compile} >
+                <CirclePlay/>
               Run
             </button>
             <button
-              className="bg-emerald-500 text-white py-2 px-4 mr-2"
-              onClick={submitCode}
-            >
+              className="bg-emerald-500 text-white py-2 px-4 mr-2 flex gap-1 rounded-sm"
+              onClick={submitCode} >
+                <Send/>
               Submit
             </button>
             <button
-              className="bg-red-500 text-white py-2 px-4"
-              onClick={clearOutput}
-            >
-              Clear Output
+              className="bg-red-500 text-white py-2 px-4 flex gap-1 rounded-sm"
+              onClick={clearOutput}>
+              <Eraser />
+              Erase Output
             </button>
+                </div>
             <label className="block mb-2">Input:</label>
             <textarea
               className="w-full p-2 border border-gray-300 mb-4"
               rows="4"
-              onChange={(e) => setUserInput(e.target.value)}
-            ></textarea>
+              onChange={(e) => setUserInput(e.target.value)}>
+            </textarea>
             <div className="mt-4">
               <h2 className="text-xl font-semibold mb-2">
                 Output:
