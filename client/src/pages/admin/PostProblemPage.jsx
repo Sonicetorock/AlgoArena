@@ -19,8 +19,8 @@ const PostProblemPage = () => {
         hints: [],
         testcases: [],
         demoTestCases: [],
-        constraintTime: 0,
-        constraintMemory: 0,
+        constraintTime: 2,//default
+        constraintMemory: 2,
     });
     const [tagsInputs, setTagsInputs] = useState(['']);
     const [hintsInputs, setHintsInputs] = useState(['']);

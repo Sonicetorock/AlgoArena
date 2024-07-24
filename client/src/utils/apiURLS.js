@@ -1,6 +1,6 @@
-export const apiAuth = "http://127.0.0.1:8000" + "/api/auth"
+export const apiAuth = import.meta.env.VITE_SERVER_URI + "/api/auth"
    
-export const apiUser =  "http://127.0.0.1:8000" + "/api/user"
+export const apiUser =  import.meta.env.VITE_SERVER_URI + "/api/user"
    
-export const apiAdmin =  "http://127.0.0.1:8000"+ "/api/admin"
+export const apiAdmin =  import.meta.env.VITE_SERVER_URI+ "/api/admin"
 
