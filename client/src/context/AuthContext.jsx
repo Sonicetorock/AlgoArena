@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 //create Context
 const AuthContext = createContext();
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = import.meta.env.VITE_SERVER_URI+'/api';
 
 // Util to decode JWT token
 const decodeToken = (token) => {

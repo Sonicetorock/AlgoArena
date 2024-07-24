@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const ProfilePage = () => {
   const { user ,updateUser} = useAuth();
-  const API_URL = 'http://localhost:8000/api';
+  const API_URL = import.meta.env.VITE_SERVER_URI+'/api';
   const [isEditing, setIsEditing] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   //remember we are directly accessing from local storage not calling any api like getAccountDetails
