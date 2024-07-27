@@ -35,4 +35,6 @@ EXPOSE 8000
 CMD [ "node","server.js" ]
 
 #command for running container with portmapping along with env passing
+
+#docker build imagename .
 #docker run -d --env-file .env -p 8000:8000 --name algoarena-backend-container algoarena-image

@@ -167,19 +167,21 @@ const submitCode = async (req, res) => {
         const totalTCs = problem.testcases.length;
         // Execute code for each test case
         for (const testCase of problem.testcases) {
-            const inputFilePath = generateInputFile(testCase.input);
+            const inputFilePath = generateInputFile(testCase.input,language);
             console.log('Input File created at:', inputFilePath);
 
             try {
                 const startTime = process.hrtime();
                 const output = await execute(codeFilePath, language, inputFilePath);
+                console.log("Output :", output)
                 const endTime = process.hrtime(startTime);
                 const execTime = endTime[0] * 1000 + endTime[1] / 1000000; // Convert to milliseconds
 
                 maxExecTime = Math.max(maxExecTime, execTime);
                 // Note: Measuring memory usage accurately requires additional setup
 
-                const passed = output.trim() === testCase.output.trim();
+                // const normalizedActualOutput = output.replace(/\r?\n/g, "\n");
+                const passed = (output.trim() === testCase.output.trim()) && (execTime <= problem.constraintTime*1000)
                      results.push({
                     input: testCase.input,
                     expectedOutput: testCase.output,
@@ -190,7 +192,8 @@ const submitCode = async (req, res) => {
 
                 if (!passed) {
                     allTestsPassed = false;
-                    verdict = 'WA : Wrong Answer'; // Wrong Answer
+                    if(execTime <= problem.constraintTime*1000) verdict = 'WA : Wrong Answer'; // Wrong Answer
+                    else verdict = 'TLE : Time Limit Exceeded';
                     break;
                 }
                 
@@ -234,11 +237,12 @@ const submitCode = async (req, res) => {
         // Update user's solved problems and score
         const user = await Users.findById(uid);
         if (user) {
-            if (allTestsPassed && !user.solvedQs.includes(pid)) {
+            if (allTestsPassed && !user.solvedQs.includes(pid)) {//completely solved : allTC passed
                 user.solvedQs.push(pid);
                 user.score += 100;
-            }
-            if(!allTestsPassed) user.score+= -15;
+              }
+            if(!user.attemptedQs.includes(pid)) user.attemptedQs.push(pid);//attempted
+            if(!allTestsPassed) user.score+= -15;//other than succesful attemption
             await user.save();
         }
         res.status(200).json({

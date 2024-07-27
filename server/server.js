@@ -6,10 +6,22 @@ const cors = require('cors')
 app.use(exp.json())
 app.use(exp.urlencoded({extended:false}))
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:5173', 
+const allowedOrigins = [
+    'http://localhost:5173',
+  ];
+  
+  const vercelOriginPattern = /^https:\/\/algo-arena-.*-sonicetorocks-projects\.vercel\.app$/;
+  
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || vercelOriginPattern.test(origin) || !origin) {
+        callback(null, origin);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
-}));
+  }));
 
 const {DBConnection} = require('./config/db.js')
 const { authRoutes } = require('./routes/authRoutes.js')

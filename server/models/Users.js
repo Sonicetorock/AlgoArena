@@ -58,6 +58,11 @@ const userSchema = new mongoose.Schema({
         ref:"Problem",
         default:[]
     },
+    attemptedQs:{
+        type: [mongoose.Schema.ObjectId],
+        ref:"Problem",
+        default:[]
+    },
     bio:{
         type:String,
     }
