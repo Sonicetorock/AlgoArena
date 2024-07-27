@@ -140,7 +140,10 @@ const ProblemPage = () => {
         const newRevealedHints = [...prevRevealedHints, index];
         if (newRevealedHints.length === problem.hints.length) {
           // All hints are revealed, disable tooltip
-          document.getElementById("hint-unlock").remove();
+          const hintUnlockElement = document.getElementById("hint-unlock");
+          if (hintUnlockElement) {
+            hintUnlockElement.remove();
+          }
         }
         return newRevealedHints;
       });
@@ -225,6 +228,8 @@ const ProblemPage = () => {
           </div>
 
           {/* tags */}
+          {problem.tags && problem.tags.length > 0 ? (
+
           <div className=" bg-white dark:bg-transparent p-2 m-1 shadow-xl rounded-lg">
             <p className=" text-xl font-semibold m-4 flex gap-2 items-center">
               Tags <FaTags />
@@ -239,10 +244,11 @@ const ProblemPage = () => {
                 </span>
               ))}
             </div>
-          </div>
+          </div>):<h2 className="text-xl font-semibold">No Tags!</h2>}
 
           {/* hints */}
           <Tooltip id="hint-unlock" className="z-10" />
+          {problem.hints && problem.hints.length > 0 ? (
           <div className="bg-white dark:bg-transparent p-2 m-1 shadow-xl rounded-lg">
             <h2 className="text-xl font-semibold m-4 flex gap-2 items-center">
               Hints <TfiThought />
@@ -263,17 +269,14 @@ const ProblemPage = () => {
                   data-tooltip-place="top"
                   onClick={() => revealHint(index)}
                 >
-                  <p
-                    className={`${
-                      revealedHints.includes(index) ? "block" : "hidden"
-                    }`}
-                  >
+                  <p className={`${revealedHints.includes(index) ? "block" : "hidden"}`}>
                     {hint}
                   </p>
                 </li>
               ))}
             </ul>
           </div>
+        ):<h2 className="text-xl font-semibold">No Hints! Figure this out on your own</h2>}
 
           <div className="bg-white dark:bg-transparent p-2 m-1 shadow-xl rounded-lg">
             <h2 className="text-xl font-semibold m-4 flex gap-2 items-center">
