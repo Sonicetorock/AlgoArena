@@ -64,9 +64,9 @@ const ProblemLevel_DoughnutHolder = () => {
             label: 'Count',
             data: Object.values(data),
             backgroundColor: [
-              '#4CAF50', // normal
-              '#FFC107', // premium
-              '#2196F3', // elite
+              '#FFBF70', // Normal (darker)
+              '#8AFFA0', // Premium (darker)
+              '#7FBFFF', // Elite (darker)
             ],
             hoverOffset: 10
           }]
@@ -96,8 +96,8 @@ const ProblemLevel_DoughnutHolder = () => {
   }
 
   return (
-    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: 400, textAlign: "center" }}>
-      <h1 className="text-2xl">
+    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: "100%", textAlign: "center" }}>
+      <h1 className="text-lg font-semibold mb-3 text-gray-800 text-center">
         Problem Level Distribution
       </h1>
       <Doughnut data={chartData} width={50} height={50} options={options}/>

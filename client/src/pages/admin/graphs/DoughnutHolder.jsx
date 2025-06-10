@@ -107,8 +107,8 @@ const DoughnutHolder = () => {
 
   return(
   <>
-  <div className="bg-white rounded-md shadow-lg p-3" style={{ width: 400, textAlign: "center" }}>
-      <h1 className="text-2xl">
+  <div className="bg-white rounded-md shadow-lg p-3" style={{ width: "100%", textAlign: "center" }}>
+      <h1 className="text-lg font-semibold mb-3 text-gray-800 text-center">
         Submission Verdict Analysis
       </h1>
     <Doughnut data={chartData} width={50} height={50} options={options}/>

@@ -2,16 +2,27 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { apiUser } from "../../utils/apiURLS";
+import CodeEditorSettings from "./CodeEditorSettings";
 
 // 3rd party Imports
 import { Tooltip } from "react-tooltip";
 import Editor from "@monaco-editor/react";
 import toast from "react-hot-toast";
-import CodeEditorSettings from "./CodeEditorSettings";
 import { DNA } from "react-loader-spinner";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 // icons
-import { Eraser , CirclePlay,Send} from 'lucide-react';
+import { Eraser , CirclePlay, Send } from 'lucide-react';
 import { FaTags } from "react-icons/fa6";
 import { CiCalendarDate } from "react-icons/ci";
 import { MdUpdate } from "react-icons/md";
@@ -21,6 +32,7 @@ import { useAuth } from "../../context/AuthContext";
 const ProblemPage = () => {
   const { user } = useAuth();
   const { id } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [problem, setProblem] = useState(null);
   const [userCode, setUserCode] = useState("");
   const [userLang, setUserLang] = useState("java");
@@ -51,6 +63,7 @@ const ProblemPage = () => {
       console.log("running ", payload);
       console.log(response.data);
       setUserOutput(response.data.output);
+      onOpen(); // Open the drawer to show the output
     } catch (error) {
       console.error("Error compiling code:", error);
       setIsError(true);
@@ -92,6 +105,7 @@ const ProblemPage = () => {
       else {toast.error(response.data.verdict);toast.success("YourScore-=15",{icon:'🥹'})}
       const formattedOutput = formatTestCaseResults(response.data.results,response.data.totalTCs);
       setUserOutput(formattedOutput);
+      onOpen(); // Open the drawer to show the output
     } catch (error) {
       console.error("Error submitting code:", error);
       setIsError(true);
@@ -112,13 +126,12 @@ const ProblemPage = () => {
     axios
       .get(`${apiUser}/problems/${id}`)
       .then((response) => {
+        console.log("Response data:", response.data);
         setProblem(response.data.problem);
         console.log("Problem Acquired:", problem);
       })
       .catch((error) => console.error("Error fetching problem:", error));
-  }, [id,loading]);
-
-
+  }, [id,loading, problem]);
 
   const formatTestCaseResults = (results,total) => {
     return results
@@ -126,9 +139,6 @@ const ProblemPage = () => {
         const emoji = result.passed ? "✅" : "❌";
         return `TC ${index + 1}/${total}: ${emoji} ${result.passed ? "Passed and executed in" : "Failed with"} ${result.passed ? (result.execTime/1000).toFixed(2) : "wrong answer"}\n` 
       }) 
-      // Input: ${result.input}
-      // Expected Output: ${result.expectedOutput}
-      // Actual Output: ${result.actualOutput}
   };
   
   const clearOutput = () => setUserOutput("");
@@ -346,7 +356,6 @@ const ProblemPage = () => {
             options={{
               fontSize: fontSize,
               automaticLayout: true,
-              // dragAndDrop:true,
               cursorBlinking: true,
               overviewRulerBorder: true,
             }}
@@ -380,20 +389,26 @@ const ProblemPage = () => {
               rows="4"
               onChange={(e) => setUserInput(e.target.value)}>
             </textarea>
-            <div className="mt-4">
-              <h2 className="text-xl font-semibold mb-2">
-                Output:
-                {loading && (
-                  <DNA
-                    visible={true}
-                    height="50"
-                    width="50"
-                    ariaLabel="dna-loading"
-                    wrapperStyle={{}}
-                    wrapperClass="dna-wrapper"
-                  />
-                )}
-              </h2>
+          </div>
+        </div>
+
+        <Drawer isOpen={isOpen} placement="bottom" onClose={onClose}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Output</DrawerHeader>
+
+            <DrawerBody>
+              {loading && (
+                <DNA
+                  visible={true}
+                  height="50"
+                  width="50"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              )}
               <pre
                 className={`${
                   isError ? "text-red-500" : ""
@@ -401,12 +416,20 @@ const ProblemPage = () => {
               >
                 {userOutput || ""}
               </pre>
-            </div>
-          </div>
-        </div>
+            </DrawerBody>
+
+            <DrawerFooter>
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
       </div>
     )
   );
 };
 
 export default ProblemPage;
+
+

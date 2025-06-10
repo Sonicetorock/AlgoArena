@@ -8,7 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import { apiAdmin } from "../../utils/apiURLS";
 
 //icons
-import { DeleteSharp, DriveFileRenameOutline } from "@mui/icons-material";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { SearchCheck, SearchCode } from "lucide-react";
 
 const AllProblems = () => {
@@ -87,13 +87,13 @@ const AllProblems = () => {
                                             to={`/admin/edit-problem/${problem._id}`}
                                             className="text-yellow-500 hover:text-yellow-600"
                                         >
-                                            <DriveFileRenameOutline sx={{ fontSize: "24px" }} />
+                                            <FaEdit sx={{ fontSize: "24px" }} />
                                         </Link>
                                         <button
                                             onClick={() => handleDelete(problem._id)}
                                             className="text-red-500 hover:text-red-600"
                                         >
-                                            <DeleteSharp sx={{ fontSize: "24px" }} />
+                                            <FaTrashAlt sx={{ fontSize: "24px" }} />
                                         </button>
                                     </div>
                                 </div>

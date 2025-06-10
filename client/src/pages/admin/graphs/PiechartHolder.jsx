@@ -83,8 +83,8 @@ export default function PiechartHolder() {
   }
 
   return (
-    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: 400, textAlign: "center" }}>
-      <h1 className="text-2xl">
+    <div className="bg-white rounded-md shadow-lg p-3" style={{ width: "100%", textAlign: "center" }}>
+      <h1 className="text-lg font-semibold mb-3 text-gray-800 text-center">
         Language Wise Analysis
       </h1>
       <Pie data={chartData} width={40} height={40} options={options}/>
